@@ -8,7 +8,7 @@ ENV ASPNETCORE_ENVIRONMENT="Production"
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Geography.Worker/Geography.Worker.csproj", "Geography.Worker/"]
+COPY ["OrganizationSolution/Source/App/Geography.Worker/Geography.Worker.csproj", "Geography.Worker/"]
 COPY ["OrganizationSolution/Source/App/Geography.Business/Geography.Business.csproj", "OrganizationSolution/Source/App/Geography.Business/"]
 COPY ["OrganizationSolution/Source/Framework/Framework.Business/Framework.Business.csproj", "OrganizationSolution/Source/Framework/Framework.Business/"]
 COPY ["OrganizationSolution/Source/Framework/Framework.DataAccess/Framework.DataAccess.csproj", "OrganizationSolution/Source/Framework/Framework.DataAccess/"]
@@ -19,7 +19,7 @@ COPY ["OrganizationSolution/Source/Framework/Framework.Configuration/Framework.C
 COPY ["OrganizationSolution/Source/Framework/Framework.Security/Framework.Security.csproj", "OrganizationSolution/Source/Framework/Framework.Security/"]
 COPY ["OrganizationSolution/Source/App/Geography.DataAccess/Geography.DataAccess.csproj", "OrganizationSolution/Source/App/Geography.DataAccess/"]
 COPY ["OrganizationSolution/Source/App/Geography.Entity/Geography.Entity.csproj", "OrganizationSolution/Source/App/Geography.Entity/"]
-RUN dotnet restore "./Geography.Worker/./Geography.Worker.csproj"
+RUN dotnet restore "./OrganizationSolution/Source/App/Geography.Worker/./Geography.Worker.csproj"
 COPY . .
 WORKDIR "/src/Geography.Worker"
 RUN dotnet build "./Geography.Worker.csproj" -c $BUILD_CONFIGURATION -o /app/build
