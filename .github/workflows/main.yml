@@ -1,0 +1,57 @@
+name: CI
+on:
+  push:
+    branches: ["main"]
+env:
+   ECR_REGForApi: 751111534101.dkr.ecr.us-west-2.amazonaws.com/dotnetefcorewithsqs-api
+   ECR_REGForWorker: 751111534101.dkr.ecr.us-west-2.amazonaws.com/dotnetefcorewithsqs-worker
+      
+jobs:
+  build:
+    name: Build and Pushing the Image
+    runs-on: ubuntu-latest
+    outputs:
+      output1: ${{steps.build-image.outputs.image }}
+                      
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+           
+        run: |          
+          docker build -t DotNetEFCoreWithSQSApi:$GITHUB_SHA -f Dockerfile.Api .
+          docker build -t DotNetEFCoreWithSQSWorker:$GITHUB_SHA -f Dockerfile.Worker .
+          docker push ${{ env.ECR_REGForApi }}:$GITHUB_SHA
+          docker push ${{ env.ECR_REGForWorker }}:$GITHUB_SHA
+          echo "::set-output name=image::$GITHUB_SHA"
+         
+                                          
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+      - name: Fetching the deployment repo
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          event-type: build
+          workflow: CD
+          # workflow: CD-TESTING
+          repository: vinaylunawat/dot-net-CD
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          client-payload: '{"image_name": "${{ env.ECR_REG }}", "image_tag": "${{needs.build.outputs.output1}}", "app_repo": "guestbook", "env_name": "dev"}'
