@@ -3,8 +3,8 @@ on:
   push:
     branches: ["main"]
 env:
-   ECR_REGForApi: 751111534101.dkr.ecr.us-west-2.amazonaws.com/dotnetefcorewithsqs-api
-   ECR_REGForWorker: 751111534101.dkr.ecr.us-west-2.amazonaws.com/dotnetefcorewithsqs-worker
+   ECR_REG: 751111534101.dkr.ecr.us-west-2.amazonaws.com/dotnetefcorewithsqs-api
+   ECR_REG1: 751111534101.dkr.ecr.us-west-2.amazonaws.com/dotnetefcorewithsqs-worker
       
 jobs:
   build:
@@ -34,12 +34,11 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
            
         run: |          
-          docker build -t dotnetefcorewithsqsapi:$GITHUB_SHA -f Dockerfile.Api .
-          docker build -t dotnetefcorewithsqsworker:$GITHUB_SHA -f Dockerfile.Worker .
-          docker push ${{ env.ECR_REGForApi }}:$GITHUB_SHA
-          docker push ${{ env.ECR_REGForWorker }}:$GITHUB_SHA
-          echo "::set-output name=image::$GITHUB_SHA"
-         
+          docker build -t ${{env.ECR_REG}}:$GITHUB_SHA -f Dockerfile.Api .
+          docker build -t ${{env.ECR_REG1}}:$GITHUB_SHA -f Dockerfile.Worker .
+          docker push ${{ env.ECR_REG }}:$GITHUB_SHA
+          docker push ${{ env.ECR_REG1 }}:$GITHUB_SHA
+          echo "::set-output name=image::$GITHUB_SHA"        
                                           
   release:
     runs-on: ubuntu-latest
