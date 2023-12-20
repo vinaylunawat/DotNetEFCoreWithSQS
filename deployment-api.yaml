@@ -14,7 +14,7 @@ spec:
         app: organization-api
     spec:
       containers:
-      - image: 751111534101.dkr.ecr.us-west-2.amazonaws.com/dotnetefcorewithsqs-api:9013b3e53cba495a088f48b3fb06bd5e954217c6
+      - image: 751111534101.dkr.ecr.us-west-2.amazonaws.com/dotnetefcorewithsqs-api:1.2
         name: organization-api
         env:
           - name: Application__ConnectionString
