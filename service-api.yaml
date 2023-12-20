@@ -5,7 +5,7 @@ metadata:
 spec:
   selector:
     app: organization-api
-  type: NodePort
+  type: LoadBalancer
   ports:	
   - protocol: TCP
     port: 80
