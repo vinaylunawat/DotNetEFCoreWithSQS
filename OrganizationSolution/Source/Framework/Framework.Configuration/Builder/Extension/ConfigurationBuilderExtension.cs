@@ -34,7 +34,7 @@
             {
                 configuration.AddCommandLine(args);
             }
-
+            configuration.AddEnvironmentVariables();
             return configuration;
         }
     }
