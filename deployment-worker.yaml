@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: organization-worker
+spec:
+  replicas: 2
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: organization-worker
+  template:
+    metadata:
+      labels:
+        app: organization-worker
+    spec:
+      containers:
+      - image: 751111534101.dkr.ecr.us-west-2.amazonaws.com/dotnetefcorewithsqs-worker:9013b3e53cba495a088f48b3fb06bd5e954217c6
+        name: organization-worker
+        env:
+          - name: Application__ConnectionString
+            valueFrom:
+              secretKeyRef:
+                name: organizationsecret-api
+                key: databaseconnectionstring
+          - name: Application__ReadOnlyConnectionString
+            valueFrom:
+              secretKeyRef:
+                name: organizationsecret-api
+                key: ReadOnlyConnectionString
+          - name: Application__AmazonSQSConfigurationOptions__accessKey
+            valueFrom:
+              secretKeyRef:
+                name: organizationsecret-api
+                key: SQSAccessKey
+          - name: Application__AmazonSQSConfigurationOptions__secretKey
+            valueFrom:
+              secretKeyRef:
+                name: organizationsecret-api
+                key: SQSSecretKey
+          - name: Application__AmazonSQSConfigurationOptions__sqsQueueUrl
+            valueFrom:
+              secretKeyRef:
+                name: organizationsecret-api
+                key: SQSQueueUrl
+          - name: Application__AmazonS3ConfigurationOptions__accessKey
+            valueFrom:
+              secretKeyRef:
+                name: organizationsecret-api
+                key: S3AccessKey
+          - name: Application__AmazonS3ConfigurationOptions__secretKey
+            valueFrom:
+              secretKeyRef:
+                name: organizationsecret-api
+                key: S3secretKey
+        ports:
+        - containerPort: 80
