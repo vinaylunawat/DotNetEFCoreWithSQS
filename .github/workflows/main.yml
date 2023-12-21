@@ -44,6 +44,8 @@ jobs:
       run: |        
         ls
         sed  -e '/dotnetefcorewithsqs-api/ s/:1.8.*$/:${{ steps.extract-tag.outputs.tag }}/' deployment-api.yaml
+        echo "reading file"
+        cat deployment-api.yaml
         git config --global user.email "dev@demo.com"
         git config --global user.name "demodev"
         git status
