@@ -40,11 +40,12 @@ jobs:
     - name: Extract Docker image tag
       id: extract-tag
       run: echo "::set-output name=tag::${{ github.sha }}"
+           echo "::set-output name=tag1::${{ github.sha }}"
     - name: Update deployment.yaml
       run: |        
         ls
         sed  -e '/dotnetefcorewithsqs-api/ s/:1.8.*$/:${{ steps.extract-tag.outputs.tag }}/' deployment-api.yaml
-        sed  -e '/dotnetefcorewithsqs-worker/ s/:1.8.*$/:${{ steps.extract-tag.outputs.tag }}/' deployment-worker.yaml
+        sed  -e '/dotnetefcorewithsqs-worker/ s/:1.8.*$/:${{ steps.extract-tag.outputs.tag1 }}/' deployment-worker.yaml
         run: |
         git config --global user.email "dev@demo.com"
         git config --global user.name "demodev"
