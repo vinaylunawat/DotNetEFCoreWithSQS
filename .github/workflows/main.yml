@@ -33,11 +33,24 @@ jobs:
         REPOSITORY_Worker: dotnetefcorewithsqs-worker
         IMAGE_TAG: 1.8
       run: |
-        docker build -t $REGISTRY/$REPOSITORY_API:$IMAGE_TAG -f Dockerfile_Api .
-        docker push $REGISTRY/$REPOSITORY_API:$IMAGE_TAG
-        docker build -t $REGISTRY/$REPOSITORY_Worker:$IMAGE_TAG -f Dockerfile_Worker .
-        docker push $REGISTRY/$REPOSITORY_Worker:$IMAGE_TAG
-
+        docker build -t $REGISTRY/$REPOSITORY_API:$GITHUB_SHA -f Dockerfile_Api .
+        docker push $REGISTRY/$REPOSITORY_API:$GITHUB_SHA
+        docker build -t $REGISTRY/$REPOSITORY_Worker:$GITHUB_SHA -f Dockerfile_Worker .
+        docker push $REGISTRY/$REPOSITORY_Worker:$GITHUB_SHA
+    - name: Extract Docker image tag
+      id: extract-tag
+      run: echo "::set-output name=tag::${{ github.sha }}"
+    - name: Update deployment.yaml
+      run: |        
+        ls
+        sed  -e '/dotnetefcorewithsqs-api/ s/:c5270e8905b93f1eaf05095686331f8bf13fc3df.*$/:${{ steps.extract-tag.outputs.tag }}/' deployment-api.yaml
+        sed  -e '/dotnetefcorewithsqs-api/ s/:c5270e8905b93f1eaf05095686331f8bf13fc3df.*$/:${{ steps.extract-tag.outputs.tag }}/' deployment-worker.yaml
+        run: |
+        git config --global user.email "dev@demo.com"
+        git config --global user.name "demodev"
+        git add .
+        git commit -m "Update to new version"
+        git push
     - name: Update kube config
       run: aws eks update-kubeconfig --name demo-eks    
     - name: Deploy to EKS
