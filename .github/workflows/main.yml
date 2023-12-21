@@ -43,8 +43,8 @@ jobs:
     - name: Update deployment.yaml
       run: |        
         ls
-        sed  -e '/dotnetefcorewithsqs-api/ s/:c5270e8905b93f1eaf05095686331f8bf13fc3df.*$/:${{ steps.extract-tag.outputs.tag }}/' deployment-api.yaml
-        sed  -e '/dotnetefcorewithsqs-api/ s/:c5270e8905b93f1eaf05095686331f8bf13fc3df.*$/:${{ steps.extract-tag.outputs.tag }}/' deployment-worker.yaml
+        sed  -e '/dotnetefcorewithsqs-api/ s/:1.8.*$/:${{ steps.extract-tag.outputs.tag }}/' deployment-api.yaml
+        sed  -e '/dotnetefcorewithsqs-worker/ s/:1.8.*$/:${{ steps.extract-tag.outputs.tag }}/' deployment-worker.yaml
         run: |
         git config --global user.email "dev@demo.com"
         git config --global user.name "demodev"
