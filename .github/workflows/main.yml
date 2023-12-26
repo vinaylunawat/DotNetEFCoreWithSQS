@@ -36,7 +36,7 @@ jobs:
         #docker build -t $REGISTRY/$REPOSITORY_API:$GITHUB_SHA -f Dockerfile_Api .
         #docker push $REGISTRY/$REPOSITORY_API:$GITHUB_SHA
         
-        docker build -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/dotnetefcorewithsqs-api:latest-${{ github.sha }} -f Dockerfile_api .
+        docker build -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/dotnetefcorewithsqs-api:latest-${{ github.sha }} -f Dockerfile_Api .
         docker build -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/dotnetefcorewithsqs-worker:latest-${{ github.sha }} -f Dockerfile_Worker .        
 
         docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/dotnetefcorewithsqs-api:latest-${{ github.sha }}
