@@ -14,7 +14,7 @@ spec:
         app: organization-worker
     spec:
       containers:
-      - image: 751111534101.dkr.ecr.us-west-2.amazonaws.com/dotnetefcorewithsqs-worker:1.8
+      - image: 751111534101.dkr.ecr.us-west-2.amazonaws.com/dotnetefcorewithsqs-worker:latest-1.8
         name: organization-worker
         env:
           - name: Application__ConnectionString
