@@ -33,17 +33,26 @@ jobs:
         REPOSITORY_Worker: dotnetefcorewithsqs-worker
         IMAGE_TAG: 1.8
       run: |
-        docker build -t $REGISTRY/$REPOSITORY_API:$GITHUB_SHA -f Dockerfile_Api .
-        docker push $REGISTRY/$REPOSITORY_API:$GITHUB_SHA
-        docker build -t $REGISTRY/$REPOSITORY_Worker:$GITHUB_SHA -f Dockerfile_Worker .
-        docker push $REGISTRY/$REPOSITORY_Worker:$GITHUB_SHA
+        #docker build -t $REGISTRY/$REPOSITORY_API:$GITHUB_SHA -f Dockerfile_Api .
+        #docker push $REGISTRY/$REPOSITORY_API:$GITHUB_SHA
+        
+        docker build -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/dotnetefcorewithsqs-api:latest-${{ github.sha }} -f Dockerfile_api .
+        docker build -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/dotnetefcorewithsqs-worker:latest-${{ github.sha }} -f Dockerfile_Worker .        
+
+        docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/dotnetefcorewithsqs-api:latest-${{ github.sha }}
+        docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/dotnetefcorewithsqs-worker:latest-${{ github.sha }}
+        
+        #docker build -t $REGISTRY/$REPOSITORY_Worker:$GITHUB_SHA -f Dockerfile_Worker .
+        #docker push $REGISTRY/$REPOSITORY_Worker:$GITHUB_SHA    
     - name: Extract Docker image tag
       id: extract-tag
       run: echo "::set-output name=tag::${{ github.sha }}"
     - name: Update deployment.yaml
       run: |        
         ls
-        sed  -e '/dotnetefcorewithsqs-api/ s/:1.8.*$/:${{ steps.extract-tag.outputs.tag }}/' deployment-api.yaml
+        #sed  -e '/dotnetefcorewithsqs-api/ s/:1.8.*$/:${{ steps.extract-tag.outputs.tag }}/' deployment-api.yaml
+        sed  -i '/dotnetefcorewithsqs-api/ s/:latest-.*$/:latest-${{ steps.extract-tag.outputs.tag }}/' deployment-api.yaml
+        sed  -i '/dotnetefcorewithsqs-api/ s/:latest-.*$/:latest-${{ steps.extract-tag.outputs.tag }}/' deployment-worker.yaml
         echo "reading file"
         cat deployment-api.yaml
         git config --global user.email "dev@demo.com"
