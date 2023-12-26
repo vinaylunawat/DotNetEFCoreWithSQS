@@ -52,7 +52,7 @@ jobs:
         ls
         #sed  -e '/dotnetefcorewithsqs-api/ s/:1.8.*$/:${{ steps.extract-tag.outputs.tag }}/' deployment-api.yaml
         sed  -i '/dotnetefcorewithsqs-api/ s/:latest-.*$/:latest-${{ steps.extract-tag.outputs.tag }}/' deployment-api.yaml
-        sed  -i '/dotnetefcorewithsqs-api/ s/:latest-.*$/:latest-${{ steps.extract-tag.outputs.tag }}/' deployment-worker.yaml
+        sed  -i '/dotnetefcorewithsqs-worker/ s/:latest-.*$/:latest-${{ steps.extract-tag.outputs.tag }}/' deployment-worker.yaml
         echo "reading file"
         cat deployment-api.yaml
         git config --global user.email "dev@demo.com"
