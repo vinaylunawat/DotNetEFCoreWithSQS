@@ -14,7 +14,7 @@ spec:
         app: organization-worker
     spec:
       containers:
-      - image: 751111534101.dkr.ecr.ap-southeast-1.amazonaws.com/dotnetsql-worker:latest-e09e688d7025f55fab7b70d6d0fbd40609fd97a2
+      - image: 751111534101.dkr.ecr.ap-southeast-1.amazonaws.com/dotnetsql-worker:latest-ec314b0f09bd4545b0b9e045590554f891a61df5
         name: organization-worker
         env:
           - name: Application__ConnectionString
