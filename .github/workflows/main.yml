@@ -42,7 +42,7 @@ jobs:
     - name: Update deployment.yaml
       run: |
         ls
-
+        cd Manifests
         sed  -i '/dotnetsql-api/ s/:latest-.*$/:latest-${{ steps.extract-tag.outputs.tag }}/' deployment-api.yaml
         sed  -i '/dotnetsql-worker/ s/:latest-.*$/:latest-${{ steps.extract-tag.outputs.tag }}/' deployment-worker.yaml
         echo "reading file"
@@ -57,6 +57,7 @@ jobs:
       run: aws eks update-kubeconfig --name hackathon-eks
     - name: Deploy to EKS
       run: |
+        cd Manifests
         kubectl apply -f deployment-api.yaml -n dotnetsql-ns
         kubectl apply -f service-api.yaml -n dotnetsql-ns
         kubectl apply -f deployment-worker.yaml -n dotnetsql-ns
