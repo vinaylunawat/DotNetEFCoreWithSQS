@@ -27,14 +27,14 @@
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                List<Message> result = await _manager.ReceiveMessageAsync(_amazonSQSConfiguration);
+                List<Message> result = await _manager.ReceiveMessageAsync(_amazonSQSConfiguration, cancellationToken);
                 if (result != null && result.Count > 0)
                 {
                     foreach (var item in result)
                     {
                         var model = JsonConvert.DeserializeObject<TModel>(item.Body);
                         await MessageHandlerAsync(model, cancellationToken);
-                        await _manager.DeleteMessageAsync(_amazonSQSConfiguration, item.ReceiptHandle);
+                        await _manager.DeleteMessageAsync(_amazonSQSConfiguration, item.ReceiptHandle, cancellationToken);
                     }
                 }
             }

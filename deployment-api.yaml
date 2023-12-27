@@ -14,7 +14,7 @@ spec:
         app: organization-api
     spec:
       containers:
-      - image: 751111534101.dkr.ecr.us-west-2.amazonaws.com/dotnetefcorewithsqs-api:latest-d68585ca93d9f17431c127df8c8835a4fed352a1
+      - image: 751111534101.dkr.ecr.ap-southeast-1.amazonaws.com/dotnetsql-api:latest-1.0
         name: organization-api
         env:
           - name: Application__ConnectionString

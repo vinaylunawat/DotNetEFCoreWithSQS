@@ -10,6 +10,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
 
     public class QueueManager : ManagerBase, IQueueManager<AmazonSQSConfigurationOptions, List<Message>>
@@ -77,7 +78,7 @@
         /// </summary>
         /// <param name="config">Queue config</param>
         /// <returns></returns>
-        public async Task<List<Message>> ReceiveMessageAsync(AmazonSQSConfigurationOptions config)
+        public async Task<List<Message>> ReceiveMessageAsync(AmazonSQSConfigurationOptions config, CancellationToken cancellationToken)
         {
             EnsureArg.IsNotNull(config, nameof(config));
             var credentials = new BasicAWSCredentials(config.AccessKey, config.SecretKey);
@@ -89,7 +90,7 @@
                     MaxNumberOfMessages = config.MaxNumberOfMessages,
                     WaitTimeSeconds = config.WaitTimeInseconds
                 };
-                ReceiveMessageResponse response = await amazonSQSClient.ReceiveMessageAsync(receiveMessageRequest).ConfigureAwait(false);                
+                ReceiveMessageResponse response = await amazonSQSClient.ReceiveMessageAsync(receiveMessageRequest, cancellationToken).ConfigureAwait(false);
                 if (response.HttpStatusCode == System.Net.HttpStatusCode.OK)
                 {
                     return response.Messages.Any() ? response.Messages : new List<Message>();
@@ -107,7 +108,7 @@
         /// </summary>
         /// <param name="config">Queue config</param>
         /// <returns></returns>
-        public async Task<bool> DeleteMessageAsync(AmazonSQSConfigurationOptions config, string messageReceiptHandle)
+        public async Task<bool> DeleteMessageAsync(AmazonSQSConfigurationOptions config, string messageReceiptHandle, CancellationToken cancellationToken)
         {
             EnsureArg.IsNotNull(config, nameof(config));
 
@@ -120,7 +121,7 @@
                     ReceiptHandle = messageReceiptHandle
                 };
 
-                var response = await amazonSQSClient.DeleteMessageAsync(deleteRequest).ConfigureAwait(false);
+                var response = await amazonSQSClient.DeleteMessageAsync(deleteRequest, cancellationToken).ConfigureAwait(false);
                 if (response.HttpStatusCode == System.Net.HttpStatusCode.OK)
                 {
                     return true;

@@ -12,9 +12,9 @@
     using Geography.Business.Country.Models;
     using Framework.Business.Extension;
 
-    public class SQSMsgSubscriberBackgroudService : MessagehandlerBase<List<IndexedItem<CountryCreateModel>>>
+    public class CountryCreatedWorker : MessagehandlerBase<List<IndexedItem<CountryCreateModel>>>
     {
-        public SQSMsgSubscriberBackgroudService(ILogger<SQSMsgSubscriberBackgroudService> logger, ApplicationOptions applicationOptions, IQueueManager<AmazonSQSConfigurationOptions, List<Message>> queueManger)
+        public CountryCreatedWorker(ILogger<CountryCreatedWorker> logger, ApplicationOptions applicationOptions, IQueueManager<AmazonSQSConfigurationOptions, List<Message>> queueManger)
             : base(logger, applicationOptions, queueManger)
         {
         }

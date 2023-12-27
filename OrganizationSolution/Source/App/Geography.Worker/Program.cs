@@ -1,19 +1,15 @@
-﻿using Amazon.SQS.Model;
-using Framework.Business.ServiceProvider.Queue;
-using Framework.Configuration;
-using Framework.Configuration.Models;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Threading.Tasks;
-
-namespace Geography.Worker
+﻿namespace Geography.Worker
 {
+    using Amazon.SQS.Model;
+    using Framework.Business.ServiceProvider.Queue;
+    using Framework.Configuration;
+    using Framework.Configuration.Models;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// Program
     /// </summary>
@@ -32,7 +28,7 @@ namespace Geography.Worker
 
             var hostBuilder = new HostBuilder().ConfigureServices(services =>
             {
-                services.AddHostedService<SQSMsgSubscriberBackgroudService>();
+                services.AddHostedService<CountryCreatedWorker>();
                 services.Configure<AmazonSQSConfigurationOptions>(configuration.GetSection(nameof(AmazonSQSConfigurationOptions)));
                 services.AddSingleton(typeof(IQueueManager<AmazonSQSConfigurationOptions, List<Message>>), typeof(QueueManager));
 
