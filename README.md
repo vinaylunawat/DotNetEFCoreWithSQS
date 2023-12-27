@@ -1,1 +1,2 @@
 # DotNetEFCoreWithSQS 
+Adding Manifests
